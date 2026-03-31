@@ -1,61 +1,67 @@
 # Rocket Telemetry System (ESP32 + LoRa)
 
-Flight-computer + ground-station telemetry system for model rockets. Streams live sensor data over LoRa and logs to microSD for post-flight analysis.
+<p align="center">
+  <img src="media/images/rocket_cover_1.jpeg" alt="Rocket telemetry cover" width="520">
+  <br/><br/>
+  <img src="media/images/rocket_cover_2.jpeg" alt="Rocket telemetry detail" width="420">
+  <img src="media/images/rocket_build.jpeg" alt="Rocket build image" width="420">
+  <br/>
+  <em>Flight computer and ground station telemetry project</em>
+</p>
+
+## Overview
+
+This repository contains the firmware and project media for a **rocket telemetry system** built around an onboard **flight computer** and a separate **ground station**.
+
+The system is designed to stream live sensor data over **LoRa** during flight while also logging telemetry to **microSD** for post-flight analysis. The goal is to maintain a live downlink during operation while preserving onboard data if radio communication drops or packets are lost.
+
+This project focuses on the hardware/software boundary in embedded systems: combining sensing, packetized communication, logging, and ground-side monitoring into one telemetry pipeline.
+
+---
 
 ## Features
-- Live telemetry downlink (LoRa)
-- Onboard microSD logging
-- Modular sensors (barometer, IMU, GPS)
-- Packetized protocol (easy to extend)
-- Ground station Serial output (works with laptop dashboards)
+
+- Live telemetry downlink using **LoRa**
+- Onboard **microSD logging**
+- Modular sensor architecture
+- Separate **flight system** and **ground station**
+- Packetized telemetry protocol designed for extension
+- Serial ground-station output for use with dashboards or logging tools
+
+---
 
 ## System Overview
-**Flight Computer**
-- ESP32 + sensors + LoRa + microSD
-- Collects telemetry and transmits packets at a fixed rate
-- Logs data to SD for recovery if radio drops
 
-**Ground Station**
-- LoRa receiver (ESP32/Arduino)
-- Prints decoded telemetry over Serial (can be graphed in a dashboard)
+### Flight Computer
+- ESP32-based onboard system
+- Interfaces with sensors, LoRa radio, and microSD storage
+- Collects telemetry at a fixed update rate
+- Transmits packets to the ground station
+- Logs data locally to SD for recovery and post-flight review
+
+### Ground Station
+- LoRa receiver built around an ESP32 or Arduino-class board
+- Receives and decodes telemetry packets
+- Outputs live telemetry over Serial
+- Can be connected to a laptop dashboard or logging interface
+
+---
 
 ## Repository Layout
-- `firmware/flight-computer/` – onboard code
-- `firmware/ground-station/` – receiver code
-- `images/` – build photos + test setup images
 
-## Hardware (typical)
-Flight:
-- ESP32
-- LoRa module (SX127x)
-- Barometer (BME/BMP280)
-- IMU (MPU6050 or similar)
-- GPS (NEO-6M or similar)
-- microSD module
-- Battery + regulator
-
-Ground:
-- ESP32 (or Arduino)
-- LoRa module (SX127x)
-- Optional OLED/LCD
-
-Pinouts and wiring notes are documented in the code.
-
-## Getting Started
-1. Flash `firmware/flight-computer/` to the onboard ESP32 (Arduino IDE or PlatformIO).
-2. Flash `firmware/ground-station/` to the receiver.
-3. Set matching radio parameters (frequency, spreading factor, bandwidth).
-4. Open Serial Monitor on the ground station and confirm telemetry packets appear.
-
-## Project Status
-Work in progress. Current focus:
-- Stabilize packet decoding + error checking
-- Improve logging format + timestamps
-- Range tests and flight validation
-- Improve vertical accuracy through method testing
-
-## Photos / Build Log
-See: `images/`
-
-## License
-MIT (add a `LICENSE` file if you want this to be official)
+```text
+.
+├── README.md
+├── firmware/
+│   ├── flight_system/
+│   │   └── flight_system_2_0.ino
+│   └── ground_station/
+│       └── ground_station_2_0.ino
+├── media/
+│   └── images/
+│       ├── rocket_build.jpeg
+│       ├── rocket_cover_1.jpeg
+│       └── rocket_cover_2.jpeg
+└── tools/
+    └── repo_maintenance/
+        └── telemetry_rocket_repo_audit.py
